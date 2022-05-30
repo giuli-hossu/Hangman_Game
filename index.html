@@ -1,0 +1,146 @@
+<!DOCTYPE html> <!-- tells the browser to render this file as a html5 -->
+<html lang="en">
+<head><!-- how to handle the page-->
+    <meta charset="UTF-8"> <!--extra metadata encoded with utf-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- https://unicode-table.com/en/-->
+    <title>Hangman</title>
+    <link rel="stylesheet" href="styles.css">
+    
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <link rel="icon" href="favicon.ico?v=2">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather&family=Montserrat&family=Sacramento&display=swap" rel="stylesheet">
+<!--    <button type="button" class="btn btn-primary">Primary</button>-->
+</head>
+
+<body onload="main()" >
+<div class="top-container">
+    
+    <h1><img class="kid_image" src="images/title_image.png" alt="kid-img">Hangman game</h1>
+    
+</div>
+<div id="hang_process" class="hang_process">
+    <img class="hang_img" id="hang_id" src="images/hang.png" alt="hang-img">
+    
+</div>
+<div class="middle-container" id="middle-container_id">
+    <div id="divWord_id"></div>
+    <div class= "rand-butoane" id="butoane"></div>
+    
+</div>
+
+<div class="bottom-container">
+    <a class="footer-link" href="https://www.linkedin.com/in/ioana-giulia-hossu/">LinkedIn</a>
+    <a class="footer-link" href="https://www.instagram.com/hossugiulia/">Instagram</a>
+    <a class="footer-link" href="https://github.com/giuli-hossu">GitHub</a>
+    <p style="color: #FAEDF0;">©2022 Giulia Hossu.</p>
+</div>
+
+</body>
+<script >
+    
+    function main() {
+        var divWord=document.getElementById("divWord_id");
+        var alfabet=['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
+            'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
+            't', 'u', 'v', 'w', 'x', 'y', 'z'];
+     
+        var words=["laptop","mouse","banana","window","flower","opportunity","teacher","shopping"];
+        
+        word=words[Math.floor(Math.random() * words.length)];
+     
+        var space_word ="";
+        var k=0,final=0;
+        for(i=0;i<word.length;i++)
+        {
+            space_word+="_ "
+            divWord.innerHTML= space_word;
+        }
+        
+        butoane=document.getElementById("butoane");
+        
+        var pressed_button="";
+       
+        for( i=0;i<alfabet.length;i++)
+        {
+            var buton=document.createElement("button");
+            buton.setAttribute("class","buton1");
+            buton.innerText=alfabet[i];
+            buton.addEventListener("click",function (butonCurent)
+            {
+                pressed_button=butonCurent.target.innerText;
+                butonCurent.target.remove();
+                if(word.includes(pressed_button))
+                {
+                    for(j=0;j<word.length;j++)
+                    {
+                        if(word.charAt(j)==pressed_button)
+                        {
+                            final++;
+                            space_word = space_word.replaceAt(j, pressed_button);
+                            divWord_id.innerHTML = space_word;
+                        }
+                    }
+                }
+                else
+                {
+                    k++
+                }
+    
+                check(final,k,word);
+                
+            })
+            
+            butoane.appendChild(buton);
+        }
+        
+    }
+
+    String.prototype.replaceAt = function(index, replacement) {
+        if (index >= this.length) {
+            return this.valueOf();
+        }
+    
+        var chars = this.split(' ');
+        chars[index] = replacement;
+        return chars.join(' ');
+    }
+    
+    function check(correct,wrong,word){
+        var img = document.createElement("img");
+        
+        var div = document.getElementById("hang_id");
+        
+        if(correct==word.length)
+        {
+            document.getElementById("hang_id").src = "images/winner.png";
+            document.getElementById("middle-container_id").style.display="none";
+        }
+        else if(wrong==1)
+        {
+            document.getElementById("hang_id").src = "images/Step1.png";
+        }
+        else if(wrong==2)
+        {
+            document.getElementById("hang_id").src = "images/Step2.png";
+        }
+         else if(wrong==3)
+        {
+            document.getElementById("hang_id").src = "images/Step3.png";
+        }
+        else if(wrong==4)
+        {
+            document.getElementById("hang_id").src = "images/Step4.png";
+        }
+        else if(wrong==5)
+        {
+            document.getElementById("hang_id").src = "images/game_over.png";
+            document.getElementById("middle-container_id").style.display="none";
+        }
+        div.appendChild(img);
+    }
+  
+</script>
+
